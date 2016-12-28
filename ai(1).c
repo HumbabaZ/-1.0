@@ -10,6 +10,12 @@
  * 你可以在这里定义你自己的结构体和变量
  */
 
+int testboard[BOARD_SIZE][BOARD_SIZE];
+int menum,othernum;		//落子数
+int me_score[BOARD_SIZE][BOARD_SIZE][4];		//得分 
+int other_score[BOARD_SIZE][BOARD_SIZE][4];
+int total_me,total_other;		//总分 
+
 
 /*
  * You should init your AI here
@@ -17,7 +23,16 @@
  */
 void initAI()
 {
-
+	int i,j;
+	
+	total_me=0;total_other=0;
+	
+	for (i = 0; i < BOARD_SIZE; i++)
+        for (j = 0; j < BOARD_SIZE; j++)
+        {
+        	me_score[i][j][4]=0;
+        	other_score[i][j][4]=0;
+        }
 }
 
 /*
@@ -73,21 +88,19 @@ struct Position aiTurn(const char board[BOARD_SIZE][BOARD_SIZE], int me, int oth
      */
     int i, j;
     struct Position preferedPos;
+    int points;
     
     for (i = 0; i < BOARD_SIZE; i++)
-    {
         for (j = 0; j < BOARD_SIZE; j++)
         {
             if (EMPTY == board[i][j])
             {
-                preferedPos.x = i;
-                preferedPos.y = j;
-                return preferedPos;
+            	testboard[i][j]==1;
+            	
             }
-        }
-    }
+            	
     
-    return preferedPos;
+    
 }
 
 /*
