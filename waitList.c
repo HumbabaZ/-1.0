@@ -19,7 +19,7 @@ void waitList()
  } 
  
  
- int nextNeibor(int x,int y)
+int nextNeibor(int x,int y)
  {
  	int s
  	

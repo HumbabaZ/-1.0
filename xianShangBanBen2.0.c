@@ -94,26 +94,58 @@ struct count{
 	int others;
 	int empty;
 };
+
+struct thepoint{
+	const int FIVE;
+	const int FOUR;
+	const int preFOUR;
+	const int THREE;
+	const int blockFOUR;
+	const int preTHREE;
+	const int TWO;
+	const int blockTHREE;
+	const int preTWO;
+	const int blockpreFOUR;
+	const int blockTWO;
+	
+};
  
 //变量
  
-int testboard[BOARD_SIZE][BOARD_SIZE]={0};
+int table[BOARD_SIZE][BOARD_SIZE]={0};
 int menum,othernum;		//落子数
 int mescore[BOARD_SIZE][BOARD_SIZE][4]={0};		//得分 
-int otherscore[BOARD_SIZE][BOARD_SIZE][4]={0};
+int otherscore[BOARD_SIZE][BOARD_SIZE][4]={0};		//第三个[]:0--列 1--行 2--正对角线 3--反对角线
 int totalse,totalother;		//总分 
 int waitlist[BOARD_SIZE][BOARD_SIZE]={0};		//候选列表 
 
- struct count countfive[4][5]{		//计算当前点所在行、列、对角线上空位与敌我棋子的数目 
- 	0,0,0								//第一个[]:0--列 1--行 2--正对角线 3--反对角线 
- };										//第二个[]：0--当前点位于countfive的最大值端 
+struct count countfive[4][5]={				//计算当前点所在行、列、对角线上空位与敌我棋子的数目 
+ 								0,0,0								//第一个[]:0--列 1--行 2--正对角线 3--反对角线 
+ 								};										//第二个[]：0--当前点位于countfive的最大值端 
 
+struct thepoint POINT={
+						100000,		//FIVE
+						80000,		//FOUR
+						6000,		//preFOUR
+						5000,		//THREE
+						4000,		//blockFOUR
+						800,		//preTHREE
+						650,		//TWO
+						500,		//blockTHREE
+						250,		//preTWO
+						150,		//blockpreFOUR
+						50			//blockTWO
+};
 
 
 //函数
 
-void waitList(int *pwaitlist,const char board[BOARD_SIZE][BOARD_SIZE]);
-int hasNeibor(int x,int y，const char board[BOARD_SIZE][BOARD_SIZE]);
+void waitList();		//候选列表 
+int hasNeibor(int x,int y);		//直接相邻 
+int nextNeibor(int x,int y);	//间接相邻								
+void Evaluate(int x,int y);		//给当前点落子后的情况打分 
+void countFive(int x,int y);		// 计算当前点所在行、列、对角线上空位与敌我棋子的数目 
+
 
 /*
  * You should init your AI here
@@ -147,6 +179,7 @@ struct Position aiBegin(const char board[BOARD_SIZE][BOARD_SIZE], int me)
     struct Position preferedPos;
     
     for (i = 0; i < BOARD_SIZE; i++)
+    {
         for (j = 0; j < BOARD_SIZE; j++)
         {
             if (EMPTY == board[i][j])
@@ -156,7 +189,7 @@ struct Position aiBegin(const char board[BOARD_SIZE][BOARD_SIZE], int me)
                 return preferedPos;
             }
         }
-    
+	}
     return preferedPos;
 }
 
@@ -183,23 +216,34 @@ struct Position aiTurn(const char board[BOARD_SIZE][BOARD_SIZE], int me, int oth
     waitList();
     
     for (i = 0; i < BOARD_SIZE; i++)
+    {
+	   
         for (j = 0; j < BOARD_SIZE; j++)
         {
         	
-        	testboard[i][j]=board[i][j];
-        	
+        	table[i][j]=board[i][j];
+        }
+    }
+    
+    for (i = 0; i < BOARD_SIZE; i++)
+    {
+
+        for (j = 0; j < BOARD_SIZE; j++)
+        {
+
         	
             if (EMPTY == board[i][j]&&waitlist[i][j]!=0)
             {
             	
-            	testboard[i][j]==1;
+            	table[i][j]=ME;
             	
-            	score[i][j]=Evaluate(i,j);
+            	countFive(i,j);
+            	Evaluate(i,j);
+            	
             	
             }
-            	
-    
-    
+ 		}
+	}
 }
 
 /*
