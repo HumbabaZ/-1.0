@@ -87,7 +87,14 @@ void debug(const char *str)
  * 你可以在这里定义你自己的结构体和变量
 
  */
+//结构体
 
+struct count{
+	int mine;
+	int others;
+	int empty;
+};
+ 
 //变量
  
 int testboard[BOARD_SIZE][BOARD_SIZE]={0};
@@ -96,6 +103,11 @@ int mescore[BOARD_SIZE][BOARD_SIZE][4]={0};		//得分
 int otherscore[BOARD_SIZE][BOARD_SIZE][4]={0};
 int totalse,totalother;		//总分 
 int waitlist[BOARD_SIZE][BOARD_SIZE]={0};		//候选列表 
+
+ struct count countfive[4][5]{		//计算当前点所在行、列、对角线上空位与敌我棋子的数目 
+ 	0,0,0								//第一个[]:0--列 1--行 2--正对角线 3--反对角线 
+ };										//第二个[]：0--当前点位于countfive的最大值端 
+
 
 
 //函数
@@ -155,8 +167,7 @@ struct Position aiBegin(const char board[BOARD_SIZE][BOARD_SIZE], int me)
  * 在这里，me的取值只可能是ME(1)，即board(棋盘)上为ME(1)的位置表示你的棋子，board(棋盘)上为OTHER(2)的位置表示对手的棋子。
  * 你需要返回一个结构体Position，在x属性和y属性填上你想要落子的位置。 
  */
-struct Position aiTurn(const char board[BOARD_SIZE][BOARD_SIZE], int me, int otherX, int otherY,int waitlist[BOARD_SIZE][BOARD_SIZE],
-						int mescore[BOARD_SIZE][BOARD_SIZE][4],int othercsore[BOARD_SIZE][BOARD_SIZE][4])
+struct Position aiTurn(const char board[BOARD_SIZE][BOARD_SIZE], int me, int otherX, int otherY)
 {
     /*
      * TODO: Write your own ai here!
@@ -167,17 +178,23 @@ struct Position aiTurn(const char board[BOARD_SIZE][BOARD_SIZE], int me, int oth
     int i, j;
     struct Position preferedPos;
     int points;
+    int score[BOARD_SIZE][BOARD_SIZE];
     
-    waitList(*waitlist,(const char (*)[20])board);
+    waitList();
     
     for (i = 0; i < BOARD_SIZE; i++)
         for (j = 0; j < BOARD_SIZE; j++)
         {
+        	
+        	testboard[i][j]=board[i][j];
+        	
+        	
             if (EMPTY == board[i][j]&&waitlist[i][j]!=0)
             {
-            	board[i][j]==1;
             	
-            	Evaluate(i,j,mescore[0][0],otherscore[0][0])
+            	testboard[i][j]==1;
+            	
+            	score[i][j]=Evaluate(i,j);
             	
             }
             	
